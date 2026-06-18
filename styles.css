@@ -190,3 +190,59 @@ footer a:hover{color:#fff}
   section{padding:64px 0}
   .hero{padding:56px 0 70px}
 }
+
+/* ===== Booking modal ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(17,52,59,.55);backdrop-filter:blur(3px);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+body.modal-lock{overflow:hidden}
+.modal{background:#fff;border-radius:20px;max-width:560px;width:100%;margin:auto;box-shadow:0 24px 70px rgba(17,52,59,.30);position:relative}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:24px 26px 0}
+.modal-head h3{font-family:var(--font-display);font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
+.modal-head p{font-size:.86rem;color:#4F6B70;margin-top:3px}
+.modal-price{margin-top:9px;background:var(--mist);color:var(--teal);font-weight:700;font-size:.82rem;padding:5px 12px;border-radius:50px}
+.modal-close{background:var(--mist);border:none;width:36px;height:36px;border-radius:50%;font-size:1.3rem;line-height:1;cursor:pointer;color:var(--ink);flex-shrink:0}
+.modal-close:hover{background:var(--line)}
+.steps-ind{display:flex;gap:8px;margin:16px 26px 0}
+.steps-ind .si{flex:1;height:5px;border-radius:5px;background:var(--line);transition:background .2s}
+.steps-ind .si.active{background:var(--teal)}
+.modal-body{padding:18px 26px 26px}
+.step-pane{display:none}
+.step-pane.active{display:block}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}
+.field label{font-size:.8rem;font-weight:700}
+.field .req{color:#C2410C}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.input-invalid{border-color:#E0612F !important;box-shadow:0 0 0 1px #E0612F}
+.field-err{color:#C2410C;font-size:.8rem;font-weight:600;margin:4px 0 12px;display:none}
+.field-err.show{display:block}
+.modal-actions{display:flex;gap:12px;margin-top:8px}
+.modal-actions .btn{flex:1;justify-content:center}
+.cal{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-head b{font-family:var(--font-display);font-size:1rem}
+.cal-nav{background:var(--mist);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.1rem;color:var(--ink)}
+.cal-nav:hover:not(:disabled){background:var(--line)}
+.cal-nav:disabled{opacity:.35;cursor:not-allowed}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-dow{text-align:center;font-size:.7rem;font-weight:700;color:#7A9296;padding:4px 0}
+.cal-day{aspect-ratio:1;border:none;background:transparent;border-radius:9px;font-size:.9rem;font-weight:600;color:var(--ink);cursor:pointer;font-family:var(--font-body)}
+.cal-day:hover:not(:disabled):not(.empty){background:var(--mist)}
+.cal-day.empty{visibility:hidden}
+.cal-day:disabled{color:#C7D5D8;cursor:not-allowed}
+.cal-day.selected{background:var(--teal);color:#fff}
+.cal-day.today:not(.selected){box-shadow:inset 0 0 0 1.5px var(--teal)}
+.slots-label{font-size:.82rem;font-weight:700;margin-bottom:10px}
+.slots-empty{font-size:.84rem;color:#7A9296;padding:6px 0 4px}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.slot{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 8px;font-size:.84rem;font-weight:600;cursor:pointer;color:var(--ink);text-align:center;font-family:var(--font-body)}
+.slot:hover{border-color:var(--teal)}
+.slot.selected{background:var(--teal);color:#fff;border-color:var(--teal)}
+.modal-success{text-align:center;padding:14px 8px 20px}
+.modal-success .tick{width:60px;height:60px;border-radius:50%;background:var(--teal);color:#fff;font-size:1.8rem;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.modal-success h3{font-family:var(--font-display);font-size:1.4rem;margin-bottom:8px}
+.modal-success p{color:#4F6B70;font-size:.95rem;max-width:400px;margin:0 auto}
+@media(max-width:600px){
+  .modal-head{padding:20px 18px 0}
+  .modal-body{padding:16px 18px 22px}
+  .steps-ind{margin:14px 18px 0}
+}

@@ -190,7 +190,7 @@
       </div>
       <div class="price-output">
         <span>Estimated per visit</span>
-        <b id="priceVal">$150–180</b>
+        <b id="priceVal">$255–305</b>
       </div>
       <a href="#book" class="btn btn-primary submit-btn">Book this clean →</a>
       <p class="pc-note">Final price confirmed before your first visit. No surprises, no upsells at the door.</p>
@@ -237,7 +237,7 @@
           <li><span class="check">✓</span> Photo checklist sent after each clean</li>
           <li><span class="check">✓</span> One invoice, net-30 available</li>
         </ul>
-        <a href="#book" class="btn btn-sun">Request a walkthrough</a>
+        <a href="#book" class="btn btn-sun" data-service="Commercial / office">Request a walkthrough</a>
       </div>
     </div>
   </div>
@@ -382,50 +382,17 @@
         <li><span class="check">✓</span> ¿Prefiere español? Sin problema 🇲🇽</li>
       </ul>
     </div>
-    <!-- ============================================================
-         LEAD CAPTURE: This form posts to your CRM/automation tool.
-         To connect GoHighLevel (or Zapier/Make), set GHL_WEBHOOK_URL
-         in the <script> at the bottom of this file to your inbound
-         webhook URL. Recommended automations on submit:
-         1. Instant confirmation message with booking link
-         2. Pipeline: New Lead -> Booked -> Cleaned -> Review Request -> Recurring
-         ============================================================ -->
-    <form class="quote-form" id="leadForm" onsubmit="handleSubmit(event)">
-      <h3>Get confirmed in minutes</h3>
-      <p class="form-sub">✦ Average response time today: <b>3 minutes</b></p>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name">
-        </div>
-        <div class="form-group">
-          <label for="phone">Mobile number</label>
-          <input type="tel" id="phone" name="phone" placeholder="(470) 555-0123" required autocomplete="tel">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="type">Service type</label>
-          <select id="type" name="type" required>
-            <option value="">Choose one…</option>
-            <option>Recurring home cleaning</option>
-            <option>One-time deep clean</option>
-            <option>Move-in / move-out</option>
-            <option>Commercial / office</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="zip">Zip code</label>
-          <input type="text" id="zip" name="zip" placeholder="30517" required inputmode="numeric" autocomplete="postal-code">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="notes">Anything we should know? <span style="font-weight:400;color:#7A9296">(optional)</span></label>
-        <textarea id="notes" name="notes" rows="2" placeholder="Pets, gate codes, preferred days…"></textarea>
-      </div>
-      <button type="submit" class="btn btn-sun submit-btn">Confirm my spot →</button>
-      <p class="form-note">By submitting you agree to receive a booking confirmation. No marketing spam, ever.</p>
-    </form>
+    <!-- Booking is handled by the popup in booking.js (any [data-book] or #book link opens it). -->
+    <div class="quote-form" id="bookLauncher">
+      <h3>Ready to book?</h3>
+      <p class="form-sub">See your price, choose a date &amp; a 1-hour arrival window, and we'll confirm in minutes.</p>
+      <button type="button" class="btn btn-sun submit-btn" data-book>📅 Start your booking →</button>
+      <ul class="quote-bullets" style="margin-top:18px">
+        <li><span class="check">✓</span> Pick a 1-hour arrival window, 8am–4pm</li>
+        <li><span class="check">✓</span> Takes about 60 seconds</li>
+      </ul>
+      <p class="form-note">No spam — just your booking confirmation.</p>
+    </div>
   </div>
 </section>
 
@@ -501,7 +468,7 @@
 <script>
 // ===== Instant price calculator =====
 let freqMult = 1;
-const BASE = 95, PER_BED = 22, PER_BATH = 18;
+const BASE = 123.5, PER_BED = 28.6, PER_BATH = 23.4;  // base pricing +30%
 function setFreq(el){
   document.querySelectorAll('.freq-pill').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');
@@ -517,27 +484,8 @@ function calcPrice(){
   document.getElementById('priceVal').textContent = '$'+lo+'–'+hi;
 }
 calcPrice();
-
-// ===== Lead form =====
-function handleSubmit(e){
-  e.preventDefault();
-  // ===========================================================
-  // CRM WEBHOOK: replace the URL below with your GoHighLevel
-  // inbound webhook (Automation > Workflows > Inbound Webhook),
-  // or a Zapier/Make webhook. Left blank, the form still shows
-  // the success state but does not send data anywhere.
-  // ===========================================================
-  const GHL_WEBHOOK_URL = "REPLACE_WITH_YOUR_GHL_WEBHOOK_URL";
-  const form = e.target;
-  const data = Object.fromEntries(new FormData(form));
-  data.estimated_price = (document.getElementById('priceVal')||{}).textContent || '';
-  data.page = location.pathname;
-  if(GHL_WEBHOOK_URL.startsWith("http")){
-    fetch(GHL_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(()=>{});
-  }
-  form.innerHTML = '<h3>✅ You\'re in, '+(data.name||'neighbor')+'!</h3><p class="form-sub">Watch for your confirmation — we\'ll lock in your booking in just a few minutes.</p>';
-}
 </script>
+<script src="booking.js"></script>
 
 </body>
 </html>

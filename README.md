@@ -37,7 +37,7 @@ python3 -m http.server 8000   # then visit http://localhost:8000
 ## Things to fill in before/after launch
 
 - **Phone number** — there is **no public phone** yet (by design). All CTAs route to the booking form. When a real number exists, add `tel:`/`sms:` CTAs and a `telephone` field to the JSON-LD. (No fake/`555` numbers — they hurt trust and schema validity.)
-- **Booking popup** — every "Book" CTA opens a popup (`booking.js`) that collects name, phone, service, address, city, zip, notes, then a date and a 1-hour arrival window (8 AM–4 PM). Connect your CRM in **one place**: set `BOOKING_WEBHOOK_URL` at the top of `booking.js` to your GoHighLevel / Zapier / Make inbound webhook. Until then it shows the confirmation screen but sends nowhere.
+- **Booking popup** — every "Book" CTA opens a popup (`booking.js`) that collects name, phone, service, address, city, zip, notes, then a date and a 1-hour arrival window (8 AM–4 PM), plus optional **add-ons** that raise the total (edit the `ADDONS` list at the top of `booking.js` to change items/prices). Connect your CRM in **one place**: set `BOOKING_WEBHOOK_URL` at the top of `booking.js` to your GoHighLevel / Zapier / Make inbound webhook. Until then it shows the confirmation screen but sends nowhere.
 - **OG image** — `og-image.png` (1200×630) is what social platforms show. Regenerate from `og-image.svg` if you change branding.
 - **Reviews** — the testimonials are placeholders. Swap in real ones. Only add `Review`/`aggregateRating` schema once they are real, or it violates Google's guidelines.
 

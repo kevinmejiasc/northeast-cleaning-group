@@ -25,6 +25,20 @@
   var sel = { date: null, slot: null };
   var view = { y: 0, m: 0 };
   var lastTrigger = null;
+  var basePrice = 0;
+  var selectedAddons = {};
+  var ADDONS = [
+    { id: 'oven',      label: 'Inside the oven',                     price: 35 },
+    { id: 'fridge',    label: 'Inside the refrigerator',            price: 30 },
+    { id: 'cabinets',  label: 'Inside kitchen cabinets',            price: 35 },
+    { id: 'windows',   label: 'Interior windows',                   price: 40 },
+    { id: 'laundry',   label: 'Laundry — wash & fold (per load)',   price: 25 },
+    { id: 'linens',    label: 'Change bed linens (per bed)',        price: 10 },
+    { id: 'pethair',   label: 'Pet-hair deep removal',              price: 30 },
+    { id: 'furniture', label: 'Move & clean behind heavy furniture', price: 40 },
+    { id: 'garage',    label: 'Garage sweep-out',                   price: 45 },
+    { id: 'haul',      label: 'Light junk / trash haul-away',       price: 50 }
+  ];
 
   var MODAL_HTML =
   '<div class="modal-overlay" id="bkOverlay" role="dialog" aria-modal="true" aria-labelledby="bkTitle">' +
@@ -60,23 +74,9 @@
           '<div class="slots-label" id="bkSlotsLabel" style="display:none">Choose a 1-hour arrival window</div>' +
           '<div class="slots-empty" id="bkSlotEmpty">Pick a date above to see arrival windows.</div>' +
           '<div class="slots" id="bkSlots" style="display:none"></div>' +
-          '<div class="disclaimer" id="bkDisclaimer">' +
-            '<h4>Before you book — standard cleaning only</h4>' +
-            '<p style="margin-bottom:8px">To keep your price accurate and your crew safe, our service does <b>not</b> include:</p>' +
-            '<ul>' +
-              '<li>Moving or removing furniture, appliances, or large/heavy objects (we clean around what we can safely reach)</li>' +
-              '<li>Trash, debris, or junk hauling / removal</li>' +
-              '<li>Biohazards or bodily waste — blood, feces, urine, or vomit (human or animal), and pet litter/waste</li>' +
-              '<li>Mold remediation or heavy mildew</li>' +
-              '<li>Pest, insect, or rodent infestations and their droppings</li>' +
-              '<li>Hoarding or extreme-clutter cleanup</li>' +
-              '<li>Post-construction or post-renovation debris</li>' +
-              '<li>Exterior work — outside windows, pressure washing, gutters, garages, patios, or anything needing a tall ladder or heights</li>' +
-              '<li>Lifting heavy items or climbing above a step stool</li>' +
-            '</ul>' +
-            'Need something on this list? Reach out and we\'ll point you to the right specialist.' +
-          '</div>' +
-          '<label class="agree"><input type="checkbox" id="bkAgree"> I understand this is for standard cleaning only and agree to the items above.</label>' +
+          '<div class="addons-head">Add to your clean <span>(optional)</span></div>' +
+          '<div class="addons" id="bkAddons"></div>' +
+          '<div class="bk-total"><span>Total per visit</span><b id="bkTotalVal">$0</b></div>' +
           '<div class="field-err" id="bkErr2">Please choose a date and an arrival window.</div>' +
           '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="bkBack">← Back</button><button type="button" class="btn btn-sun" id="bkConfirm">Confirm booking</button></div>' +
         '</div>' +
@@ -189,6 +189,32 @@
     });
   }
 
+  function parsePrice(t) { var n = parseInt(String(t).replace(/[^0-9]/g, ''), 10); return isNaN(n) ? 0 : n; }
+  function addonsTotal() { var t = 0; ADDONS.forEach(function (a) { if (selectedAddons[a.id]) t += a.price; }); return t; }
+  function updateTotal() { var tv = el('bkTotalVal'); if (tv) tv.textContent = '$' + (basePrice + addonsTotal()); }
+
+  function renderAddons() {
+    var c = el('bkAddons');
+    if (!c) return;
+    var html = '';
+    ADDONS.forEach(function (a) {
+      html += '<button type="button" class="addon' + (selectedAddons[a.id] ? ' selected' : '') + '" data-id="' + a.id + '">' +
+        '<span class="addon-check" aria-hidden="true"></span>' +
+        '<span class="addon-label">' + a.label + '</span>' +
+        '<span class="addon-price">+$' + a.price + '</span>' +
+        '</button>';
+    });
+    c.innerHTML = html;
+    Array.prototype.forEach.call(c.querySelectorAll('.addon'), function (b) {
+      b.addEventListener('click', function () {
+        var id = b.getAttribute('data-id');
+        if (selectedAddons[id]) delete selectedAddons[id]; else selectedAddons[id] = true;
+        b.classList.toggle('selected');
+        updateTotal();
+      });
+    });
+  }
+
   function mark(id, bad) { var e = el(id); if (bad) e.classList.add('input-invalid'); else e.classList.remove('input-invalid'); }
   function showErr(id) { el(id).classList.add('show'); }
   function hideErr(id) { el(id).classList.remove('show'); }
@@ -212,7 +238,7 @@
     var sis = el('bkInd').children;
     sis[0].classList.toggle('active', n >= 1);
     sis[1].classList.toggle('active', n >= 2);
-    if (n === 2) { renderCalendar(); renderSlots(); }
+    if (n === 2) { renderCalendar(); renderSlots(); renderAddons(); updateTotal(); }
     if (el('bkModal')) el('bkModal').scrollTop = 0;
     if (el('bkOverlay')) el('bkOverlay').scrollTop = 0;
   }
@@ -228,15 +254,17 @@
     el('bkCity').value = document.body.getAttribute('data-city') || '';
     mark('bkCity', false);
     hideErr('bkErr1'); hideErr('bkErr2');
-    el('bkAgree').checked = false;
+    basePrice = parsePrice((document.getElementById('priceVal') || {}).textContent);
+    selectedAddons = {};
     el('bkStep1').style.display = ''; el('bkStep2').style.display = '';
     el('bkSuccess').style.display = 'none';
     el('bkInd').style.display = '';
     goStep(1);
+    renderAddons();
+    updateTotal();
 
-    var pv = document.getElementById('priceVal');
     var chip = el('bkPriceChip');
-    if (pv && pv.textContent) { chip.textContent = 'Your price: ' + pv.textContent + ' / visit'; chip.style.display = 'inline-block'; }
+    if (basePrice > 0) { chip.textContent = 'Starting at $' + basePrice + ' / visit'; chip.style.display = 'inline-block'; }
     else chip.style.display = 'none';
 
     el('bkOverlay').classList.add('open');
@@ -254,8 +282,8 @@
 
   function submit() {
     if (!sel.date || sel.slot === null) { el('bkErr2').textContent = 'Please choose a date and an arrival window.'; showErr('bkErr2'); return; }
-    if (!el('bkAgree').checked) { el('bkErr2').textContent = 'Please accept the cleaning terms to continue.'; showErr('bkErr2'); return; }
-    var pv = document.getElementById('priceVal');
+    var addOnTotal = addonsTotal();
+    var total = basePrice + addOnTotal;
     var data = {
       name: el('bkName').value.trim(),
       phone: el('bkPhone').value.trim(),
@@ -268,9 +296,11 @@
       booking_date_readable: sel.date.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
       arrival_window: slotLabel(sel.slot),
       arrival_start_24h: (sel.slot < 10 ? '0' : '') + sel.slot + ':00',
-      estimated_price: pv ? pv.textContent : '',
+      base_price: basePrice,
+      addons: ADDONS.filter(function (a) { return selectedAddons[a.id]; }).map(function (a) { return a.label + ' (+$' + a.price + ')'; }).join('; '),
+      addons_total: addOnTotal,
+      total_price: total,
       city_page: document.body.getAttribute('data-city') || '',
-      agreed_terms: true,
       page: location.pathname,
       source: 'booking_modal'
     };
@@ -288,7 +318,7 @@
     el('bkInd').style.display = 'none';
     el('bkSuccessName').textContent = "You're booked, " + (data.name || 'neighbor') + "!";
     el('bkSuccessMsg').textContent = "We've got your request for " + data.booking_date_readable +
-      ", " + data.arrival_window + ". We'll confirm shortly with your cleaner's details.";
+      ", " + data.arrival_window + " — $" + total + "/visit. We'll confirm shortly with your cleaner's details.";
     el('bkSuccess').style.display = 'block';
     if (el('bkModal')) el('bkModal').scrollTop = 0;
     if (el('bkOverlay')) el('bkOverlay').scrollTop = 0;

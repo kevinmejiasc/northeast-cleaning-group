@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="'Outfit','Inter',Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F0F6F7"/>
+      <stop offset="1" stop-color="#FDFEFE"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1090" cy="-40" r="300" fill="#BFE6EA" opacity="0.5"/>
+  <circle cx="40" cy="690" r="240" fill="#BFE6EA" opacity="0.35"/>
+  <g transform="translate(90,82)">
+    <rect width="86" height="86" rx="22" fill="#0E6E7C"/>
+    <path d="M43 12 L48 36.5 L72.5 43 L48 49.5 L43 74 L38 49.5 L13.5 43 L38 36.5 Z" fill="#FDFEFE"/>
+    <circle cx="43" cy="43" r="4.4" fill="#F5B53F"/>
+  </g>
+  <text x="198" y="140" font-size="33" font-weight="700" fill="#0E6E7C" letter-spacing="2">NORTHEAST CLEANING GROUP</text>
+  <text x="88" y="300" font-size="92" font-weight="800" fill="#11343B" letter-spacing="-2">See your price.</text>
+  <text x="88" y="402" font-size="92" font-weight="800" fill="#11343B" letter-spacing="-2">Book in 60 seconds.</text>
+  <text x="90" y="482" font-size="36" font-weight="500" fill="#3F5B61">House &amp; commercial cleaning across Northeast Georgia</text>
+  <text x="90" y="560" font-size="27" font-weight="600" fill="#0E6E7C">Vetted &amp; insured   ·   24-hr re-clean guarantee   ·   Hablamos Español</text>
+</svg>

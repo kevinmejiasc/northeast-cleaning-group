@@ -237,6 +237,13 @@ body.modal-lock{overflow:hidden}
 .slot{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 8px;font-size:.84rem;font-weight:600;cursor:pointer;color:var(--ink);text-align:center;font-family:var(--font-body)}
 .slot:hover{border-color:var(--teal)}
 .slot.selected{background:var(--teal);color:#fff;border-color:var(--teal)}
+.disclaimer{background:var(--mist);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:18px 0 12px;font-size:.79rem;color:#3F5B61;max-height:172px;overflow-y:auto}
+.disclaimer h4{font-family:var(--font-display);font-size:.9rem;color:var(--ink);margin-bottom:9px}
+.disclaimer ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin:0 0 8px}
+.disclaimer li{display:flex;gap:8px;align-items:flex-start}
+.disclaimer li::before{content:"✕";color:#C2410C;font-weight:800;flex-shrink:0}
+.agree{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;font-size:.86rem;font-weight:600;color:var(--ink);cursor:pointer}
+.agree input{width:auto;margin-top:3px;flex-shrink:0}
 .modal-success{text-align:center;padding:14px 8px 20px}
 .modal-success .tick{width:60px;height:60px;border-radius:50%;background:var(--teal);color:#fff;font-size:1.8rem;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
 .modal-success h3{font-family:var(--font-display);font-size:1.4rem;margin-bottom:8px}

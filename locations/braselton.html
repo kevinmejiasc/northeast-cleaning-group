@@ -165,8 +165,8 @@
         <div class="freq-pill" data-mult="1.15" onclick="setFreq(this)">Monthly<small>&nbsp;</small></div>
       </div>
       <div class="price-output">
-        <span>Estimated per visit</span>
-        <b id="priceVal">$255–305</b>
+        <span>Your price, per visit</span>
+        <b id="priceVal">$255</b>
       </div>
       <a href="#book" class="btn btn-primary submit-btn">Book this clean →</a>
       <p class="pc-note">Final price confirmed before your first visit. No surprises, no upsells at the door.</p>
@@ -400,9 +400,8 @@ function calcPrice(){
   const beds = parseInt(document.getElementById('beds').value);
   const baths = parseInt(document.getElementById('baths').value);
   const base = (BASE + beds*PER_BED + baths*PER_BATH) * freqMult;
-  const lo = Math.round(base/5)*5;
-  const hi = Math.round(base*1.2/5)*5;
-  document.getElementById('priceVal').textContent = '$'+lo+'–'+hi;
+  const price = Math.round(base/5)*5;
+  document.getElementById('priceVal').textContent = '$'+price;
 }
 calcPrice();
 </script>

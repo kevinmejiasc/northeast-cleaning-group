@@ -60,6 +60,23 @@
           '<div class="slots-label" id="bkSlotsLabel" style="display:none">Choose a 1-hour arrival window</div>' +
           '<div class="slots-empty" id="bkSlotEmpty">Pick a date above to see arrival windows.</div>' +
           '<div class="slots" id="bkSlots" style="display:none"></div>' +
+          '<div class="disclaimer" id="bkDisclaimer">' +
+            '<h4>Before you book — standard cleaning only</h4>' +
+            '<p style="margin-bottom:8px">To keep your price accurate and your crew safe, our service does <b>not</b> include:</p>' +
+            '<ul>' +
+              '<li>Moving or removing furniture, appliances, or large/heavy objects (we clean around what we can safely reach)</li>' +
+              '<li>Trash, debris, or junk hauling / removal</li>' +
+              '<li>Biohazards or bodily waste — blood, feces, urine, or vomit (human or animal), and pet litter/waste</li>' +
+              '<li>Mold remediation or heavy mildew</li>' +
+              '<li>Pest, insect, or rodent infestations and their droppings</li>' +
+              '<li>Hoarding or extreme-clutter cleanup</li>' +
+              '<li>Post-construction or post-renovation debris</li>' +
+              '<li>Exterior work — outside windows, pressure washing, gutters, garages, patios, or anything needing a tall ladder or heights</li>' +
+              '<li>Lifting heavy items or climbing above a step stool</li>' +
+            '</ul>' +
+            'Need something on this list? Reach out and we\'ll point you to the right specialist.' +
+          '</div>' +
+          '<label class="agree"><input type="checkbox" id="bkAgree"> I understand this is for standard cleaning only and agree to the items above.</label>' +
           '<div class="field-err" id="bkErr2">Please choose a date and an arrival window.</div>' +
           '<div class="modal-actions"><button type="button" class="btn btn-ghost" id="bkBack">← Back</button><button type="button" class="btn btn-sun" id="bkConfirm">Confirm booking</button></div>' +
         '</div>' +
@@ -211,6 +228,7 @@
     el('bkCity').value = document.body.getAttribute('data-city') || '';
     mark('bkCity', false);
     hideErr('bkErr1'); hideErr('bkErr2');
+    el('bkAgree').checked = false;
     el('bkStep1').style.display = ''; el('bkStep2').style.display = '';
     el('bkSuccess').style.display = 'none';
     el('bkInd').style.display = '';
@@ -218,7 +236,7 @@
 
     var pv = document.getElementById('priceVal');
     var chip = el('bkPriceChip');
-    if (pv && pv.textContent) { chip.textContent = 'Estimated ' + pv.textContent + ' / visit'; chip.style.display = 'inline-block'; }
+    if (pv && pv.textContent) { chip.textContent = 'Your price: ' + pv.textContent + ' / visit'; chip.style.display = 'inline-block'; }
     else chip.style.display = 'none';
 
     el('bkOverlay').classList.add('open');
@@ -235,7 +253,8 @@
   }
 
   function submit() {
-    if (!sel.date || sel.slot === null) { showErr('bkErr2'); return; }
+    if (!sel.date || sel.slot === null) { el('bkErr2').textContent = 'Please choose a date and an arrival window.'; showErr('bkErr2'); return; }
+    if (!el('bkAgree').checked) { el('bkErr2').textContent = 'Please accept the cleaning terms to continue.'; showErr('bkErr2'); return; }
     var pv = document.getElementById('priceVal');
     var data = {
       name: el('bkName').value.trim(),
@@ -251,6 +270,7 @@
       arrival_start_24h: (sel.slot < 10 ? '0' : '') + sel.slot + ':00',
       estimated_price: pv ? pv.textContent : '',
       city_page: document.body.getAttribute('data-city') || '',
+      agreed_terms: true,
       page: location.pathname,
       source: 'booking_modal'
     };
